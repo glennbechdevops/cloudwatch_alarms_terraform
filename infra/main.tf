@@ -1,6 +1,6 @@
 resource "aws_cloudwatch_dashboard" "main" {
   dashboard_name = var.student_name
-  dashboard_body = <<DASHBOARD
+  dashboard_body = <<THEREBEDRAGONS
 {
   "widgets": [
     {
@@ -24,5 +24,5 @@ resource "aws_cloudwatch_dashboard" "main" {
     }
   ]
 }
-DASHBOARD
+THEREBEDRAGONS
 }
