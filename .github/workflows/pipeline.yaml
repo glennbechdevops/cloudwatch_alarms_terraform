@@ -28,15 +28,17 @@ jobs:
         id: init
         run: terraform init
         working-directory: ./infra
-
+        
+      - name: Terraform Plan
+        id: plan
+        if: github.event_name == 'pull_request'
+        run: terraform plan   -var="student_name=$PREFIX" -var="alarm_email=$EMAIL"  -no-color
+        working-directory: ./infra
+        
       - name: Terraform Apply
         id: apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -var="student_name=$PREFIX" -var="alarm_email=$EMAIL"  -auto-approve
         working-directory: ./infra
 
-      - name: Terraform Plan
-        id: plan
-        if: github.event_name == 'pull_request'
-        run: terraform plan   -var="student_name=$PREFIX" -var="alarm_email=$EMAIL"  -no-color
-        working-directory: ./infra
+
