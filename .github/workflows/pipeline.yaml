@@ -21,13 +21,12 @@ jobs:
  #    TF_LOG: trace
     steps:
       - uses: actions/checkout@v3
-      
-      - name: Checkout terraform config folder
-      - run: cd infra
-      
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
-
+      
+      - name: Checkout to terraform config folder
+        run: cd infra
+      
       - name: Terraform init
         id: init
         run: terraform init
