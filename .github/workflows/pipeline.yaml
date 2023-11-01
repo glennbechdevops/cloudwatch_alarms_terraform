@@ -1,0 +1,36 @@
+name: "Terraform"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  terraform:
+    name: "Terraform"
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: eu-west-1
+      PREFIX: toli025
+      EMAIL: tobias.liu@live.se
+ #    TF_LOG: trace
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Apply
+        id: apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -var="prefix=$PREFIX" -var="alarm_email=$IMAGE"  -auto-approve
+
+      - name: Terraform Plan
+        id: plan
+        if: github.event_name == 'pull_request'
+        run: terraform plan   -var="prefix=$PREFIX" -var="alarm_email=$IMAGE"  -no-color
